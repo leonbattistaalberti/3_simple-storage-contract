@@ -46,12 +46,22 @@ document.addEventListener("DOMContentLoaded", () => {
     accounts = _accounts;
   });
 
+  // get data from blockchain
   let getData = () => {
     simpleStorage.methods
-      .data()
+      .get()
       .call()
       .then((result) => {
         $data.innerHTML = result;
       });
   };
+  getData();
+
+  $setData.addEventListener("submit", (e) => {
+    e.preventDefault();
+    let data = e.target.elements[0].value;
+    // FIXME: updated data not displaying immediately
+    // needs to submit value twice to update value
+    simpleStorage.methods.set(data).send({ from: accounts[0] }).then(getData);
+  });
 });
